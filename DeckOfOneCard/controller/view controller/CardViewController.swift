@@ -16,22 +16,28 @@ class CardViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        LoadCard()
     }
     
     @IBAction func drawButtonTapped(_ sender: UIButton) {
-        
+        LoadCard()
+    } // EoF
+    
+    func LoadCard() {
         CardController.fetchCard() { [weak self] (result) in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let card):
-                    self?.cardLabel.text = "\(card.value) of \(card.suit)"
+                    let value = card.value.lowercased()
+                    let suit = card.suit.lowercased()
+                    self?.cardLabel.text = "\(value.capitalized) of \(suit.capitalized)"
                     self?.fetchImageAndUpdateViews(for: card)
                 case .failure(let error):
                     self?.presentErrorToUser(localizedError: error)
                 }
             } // EoDQ
         }
-    } // EoF
+    }
     
     
     func fetchImageAndUpdateViews(for card: Card) {
